@@ -1,0 +1,10 @@
+import { DataTypes } from "sequelize";
+import { sequelize } from "../config/database.js";
+
+export const UserModel = sequelize.define("Users", {
+    username : {type: DataTypes.STRING({min:3 , max:20}), unique: true,allowNull: false},
+    email : {type: DataTypes.STRING(100), unique: true, allowNull: false},
+    password : {type: DataTypes.STRING(225), allowNull: false},
+    role : {type: DataTypes.ENUM("user", "admin")}
+
+})
