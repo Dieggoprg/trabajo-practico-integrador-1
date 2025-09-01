@@ -1,0 +1,28 @@
+{
+  "name": "trabajo-practico-integrador-1",
+  "version": "1.0.0",
+  "description": "no entiendo nada",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dieggoprg/trabajo-practico-integrador-1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dieggoprg/trabajo-practico-integrador-1/issues"
+  },
+  "homepage": "https://github.com/Dieggoprg/trabajo-practico-integrador-1#readme",
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.4",
+    "sequelize": "^6.37.7"
+  }
+}
