@@ -5,24 +5,17 @@ import { ArticleModel } from "./article.model.js";
 
 export const ArticlesTags = sequelize.define("Articles_Tags", {
     id: {type: DataTypes.INTEGER,
+        primaryKey:true,
          autoIncrement: true, 
          unique:true, 
          allowNull:false
-    },
-    articles_id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        unique:true,
-        allowNull:false
-    },
-    tags_id: {
-        type: DataTypes.INTEGER,
-        autoIncrement:true,
-        unique:true,
-        allowNull:false
     }
-
-})
+,
+} ,{
+     updatedAt:false,
+     createdAt:false
+   }
+)
 
 //RELACION N:M   ----  MUCHOS ARTICULOS TIENEN MUCHAS ETIQUETAS Y MUCHAS ETIQUETAS TIENEN MUCHOS ARTICULOS
 ArticleModel.belongsToMany(TagsModel, {through: ArticlesTags, foreignKey: "articles_id", as: "articles"})

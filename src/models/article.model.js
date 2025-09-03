@@ -7,9 +7,12 @@ export const ArticleModel = sequelize.define("Articles", {
     content: {type: DataTypes.TEXT({min:50}), allowNull: false},
     excerpt: {type: DataTypes.STRING(500)},
     status: {type: DataTypes.ENUM("published", "archived")}
+},{
+    updatedAt:false,
+    createdAt:false
 })
 
 // RELACION 1:N   ----  UN USUARIO TIENE MUCHOS ARTÍCULOS
 UserModel.hasMany(ArticleModel, {foreignKey: "user_id", as: "articles"})
 
-ArticleModel.belongsTo(UserModel, {foreignKey: "user_id", as: "author   "})
+ArticleModel.belongsTo(UserModel, {foreignKey: "user_id", as: "author", onDelete:"CASCADE"})
