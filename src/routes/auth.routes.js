@@ -9,7 +9,7 @@ import {
 import {
   createRegisterValidation,
   updateProfileValidation,
-} from "../middlewares/validations/auth.validation.js";
+} from "../middlewares/validations/auth.validations.js";
 
 import applyValidations from "../middlewares/validator.js";
 import { authMiddleware } from "../middlewares/auth.Middleware.js";

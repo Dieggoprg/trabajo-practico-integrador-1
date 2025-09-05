@@ -13,7 +13,7 @@ import {
   createArticleValidation,
   idArticleValidation,
   updateArticleValidation,
-} from "../middlewares/validations/article.validation.js";
+} from "../middlewares/validations/article.validations.js";
 
 import applyValidations from "../middlewares/validator.js";
 import { authMiddleware } from "../middlewares/auth.Middleware.js";

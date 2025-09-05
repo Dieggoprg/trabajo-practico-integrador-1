@@ -1,76 +1,91 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
+import {UserModel} from "../../models/user.model.js";
+import { Op } from "sequelize";
 
-export const createUserValidation = [
-body("username")
-    .isAlphanumeric()
-    .withMessage("'username' debe ser un string.")
-    .trim()
-    .notEmpty()
-    .withMessage("'username' no puede estar vacío")
-    .isLength({ min: 3, max: 20 })
-    .withMessage("'username' debe tener entre 3 y 20 caracteres"),
-  body("email")
-    .isString()
-    .withMessage("'email' debe ser un string.")
-    .trim()
-    .notEmpty()
-    .withMessage("'email' no puede estar vacío")
-    .isEmail()
-    .withMessage("formato de email no válido.")
-    .isLength({ max: 100 })
-    .withMessage("'email' solo permite 255 carácteres."),
-  body("password")
-    .isString()
-    .withMessage("'password' debe ser un string.")
-    .trim()
-    .notEmpty()
-    .withMessage("'password' no puede estar vacío")
-    .isStrongPassword({ minNumbers: 0, minSymbols: 0 })
-    .withMessage(
-      "'password' debe tener una longitud de 8 caracteres, debe contener al menos una minúscula, al menos una mayúscula, y al menos un número."
-    ),
-  body("role")
-    .optional()
-    .isString()
-    .withMessage("'role' debe ser un string.")
-    .trim()
-    .toLowerCase()
-    .notEmpty()
-    .withMessage("'role' no puede estar vacío")
-    .custom((value) => {
-      if (value != "admin" && value != "user")
-        throw new Error("'role' solo puede tomar los valores 'admin' y 'user'");
+export const idParamsUserValidation = [
+  param("id")
+    .isInt()
+    .withMessage("El id debe ser un número entero")
+    .custom(async (id) => {
+      if (Number(id) < 1) throw new Error("El id debe ser positivo");
       return true;
     })
+    .custom(async (id) => {
+      const user = await UserModel.findByPk(id);
+      if (!user) throw new Error("El usuario no existe");
+      return true;
+    }),
 ];
 
 export const updateUserValidation = [
- body("username")
+  param("id")
+    .isInt()
+    .withMessage("El id debe ser un número entero")
+    .custom(async (id) => {
+      if (Number(id) < 1) throw new Error("El id debe ser positivo");
+      return true;
+    })
+    .custom(async (id) => {
+      const user = await UserModel.findByPk(id);
+      if (!user) throw new Error("El usuario no existe");
+      return true;
+    }),
+  body("username")
     .optional()
-    .notEmpty().withMessage("No puedes dejar vacio el campo Username")
-    .isString().withMessage("El campo username debe ser una cadena de caracteres")
-    .isLength({min: 3, max: 20}).withMessage("El username debe ser entre 3 y 20 caracteres"),
-
+    .trim()
+    .notEmpty()
+    .withMessage("El username es obligatorio")
+    .isLength({ min: 3, max: 20 })
+    .withMessage(
+      "El username debe tener un minimo de 3 caracteres y un maximo de 20"
+    )
+    .isAlphanumeric()
+    .withMessage("El username debe ser alfanumerico")
+    .custom(async (username, { req }) => {
+      const usernameMinuscula = username.toLowerCase();
+      const user = await UserModel.findOne({
+        where: { username: usernameMinuscula, id: { [Op.ne]: req.params.id } },
+      });
+      if (user) {
+        throw new Error("El username ya existe");
+      }
+      return true;
+    }),
   body("email")
     .optional()
-    .notEmpty().withMessage("No puedes dejar vacio el campo Email")
-    .isEmail().withMessage("Debe ser un email válido"),
-
+    .trim()
+    .notEmpty()
+    .withMessage("El email es obliatorio")
+    .isEmail()
+    .withMessage("No tiene el formato ejemplo@gmail.com")
+    .isLength({ max: 100 })
+    .withMessage("El email debe tener al un maximos de 100 caracteres ")
+    .custom(async (email, { req }) => {
+      const emailMinuscula = email.toLowerCase();
+      const emailExiste = await UserModel.findOne({
+        where: { email: emailMinuscula, id: { [Op.ne]: req.params.id } },
+      });
+      if (emailExiste) {
+        throw new Error("El email ya existe");
+      }
+      return true;
+    })
+    .escape(),
   body("password")
-  .optional()
-  .notEmpty().withMessage("No puedes dejar vacio el campo Password")
-  .isLength({ min: 6, max: 225 }).withMessage("La contraseña debe tener entre 6 y 225 caracteres"),
-
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage("El password es obligatorio")
+    .isLength({ min: 8, max: 255 })
+    .withMessage(
+      "El password debe tener un minimo de 8 caracteres y no puede tener más de 255 caracteres"
+    )
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)
+    .withMessage(
+      "La contraseña debe tener al menos una minuscula, una mayuscula y un número"
+    ),
   body("role")
-  .optional()
-  .isString().withMessage("El campo 'role' debe ser una cadena de Texto")
-  .trim()
-  .toLowerCase()
-  .notEmpty()
-  .withMessage("El campo 'role' no puede estar vacío")
-  .custom((value) => {
-    if (value != "admin" && value != "user") 
-      throw new Error('el campo "role" solo puede tomar los valores "admin" y/o "user" ');
-    return true;
-  })
+    .optional()
+    .isIn(["user", "admin"])
+    .withMessage("El campo role sólo puede ser 'user' o 'admin'"),
 ];

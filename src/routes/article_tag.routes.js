@@ -1,13 +1,15 @@
 import { Router } from "express";
-import {
+import {  
   createArticleTag,
   deleteArticleTag,
 } from "../controllers/article_tag.controller.js";
 
+
+
 import {
   createArticleTagValidation,
   deleteArticleTagValidation,
-} from "../middlewares/validations/article_tag.validation.js";
+} from "../middlewares/validations/article_tag.validations.js";
 
 import applyValidations from "../middlewares/validator.js";
 import { authMiddleware } from "../middlewares/auth.Middleware.js";

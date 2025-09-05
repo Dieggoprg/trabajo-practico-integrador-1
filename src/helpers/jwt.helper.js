@@ -7,7 +7,7 @@ export const generateToken = (payload) => {
       expiresIn: "1h", // Token válido por 1 hora
     });
   } catch (error) {
-    throw new Error("Error generando el token: " + error.message);
+    throw new Error("Error al generar el token: " + error.message);
   }
 };
 // Verificar token JWT
@@ -15,6 +15,6 @@ export const verifyToken = (token) => {
   try {
     return jwt.verify(token, process.env.JWT_SECRET);
   } catch (error) {
-    throw new Error("Error verificando el token: " + error.message);
+    throw new Error("Error al verificar el token: " + error.message);
   }
 };

@@ -11,7 +11,7 @@ import {
   createTagValidation,
   idParamsTagValidation,
   updateTagValidation,
-} from "../middlewares/validations/tag.validation.js";
+} from "../middlewares/validations/tag.validations.js";
 
 import applyValidations from "../middlewares/validator.js";
 import { authMiddleware } from "../middlewares/auth.Middleware.js";

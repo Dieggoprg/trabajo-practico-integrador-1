@@ -1,14 +1,16 @@
 import { Router } from "express";
 import {
-  deleteUser,
-  getAllUser,
-  getByPkUser,
-  updateUser,
-} from "../controllers/user.controller.js";
+    createUser,
+//   deleteUser,
+  getAllUser
+//   getByPkUser
+//   updateUser
+}
+from "../controllers/user.controller.js";
 import {
   idParamsUserValidation,
   updateUserValidation,
-} from "../middlewares/validations/user.validation.js";
+} from "../middlewares/validations/user.validations.js";
 import applyValidations from "../middlewares/validator.js";
 import { authMiddleware } from "../middlewares/auth.Middleware.js";
 import { adminMiddleware } from "../middlewares/admin.Middleware.js";
@@ -24,7 +26,14 @@ userRouter.get(
   adminMiddleware,
   idParamsUserValidation,
   applyValidations,
-  getByPkUser
+//   getByPkUser
+);
+
+userRouter.post(
+  "/users",
+  authMiddleware,
+  adminMiddleware,
+  createUser
 );
 
 userRouter.put(
@@ -34,7 +43,7 @@ userRouter.put(
   updateUserValidation,
   applyValidations,
   dataValidada,
-  updateUser
+//   updateUser
 );
 userRouter.delete(
   "/users/:id",
@@ -42,7 +51,7 @@ userRouter.delete(
   adminMiddleware,
   idParamsUserValidation,
   applyValidations,
-  deleteUser
+//   deleteUser
 );
 
 
