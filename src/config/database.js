@@ -13,7 +13,7 @@ export const sequelize = new Sequelize(
 
 export const connectDB = async () => {
     try {
-        await sequelize.sync();
+        await sequelize.sync({force:true});
         console.log("BASE DE DATOS SINCONIZADA CORRECTAMENTE")
         await sequelize.authenticate();
         console.log("BASE DE DATOS AUTENTICADA CORRECTAMENTE")
